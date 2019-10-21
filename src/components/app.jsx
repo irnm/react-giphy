@@ -2,32 +2,39 @@ import React, { Component } from 'react';
 import Search from "./search.jsx";
 import Gif from "./gif.jsx";
 import List from "./list.jsx";
+import giphy from "giphy-api";
 
 class App extends Component {
     constructor(props) {
         super(props)
         
         this.state = {
-            gifs = [],
-            selectedGifId = "l4FGqXZZQzzfYgM2A"
+            gifs: [],
+            selectedGifId: "l4FGqXZZQzzfYgM2A"
         }
+
+        this.search("last kingdom");
     }
 
+    search = (query) => {
+        // To do: Call API
+        giphy('1KMPHCBIOe3hOjJwCJQX49sRc6cM0oIm').search({
+            q: 'pokemon',
+            rating: 'g',
+            limit: 10
+            // Res contains gif data!
+        }, (error, result) => {
+            this.setState({
+                gifs: result.data
+            });
+        })
+    };
+    
     render () {
-        const gifs = [
-            { id: "31R6hAWXVnaGEfyfJS"},
-            { id: "MaB1HvmjU92JW"},
-            { id: "emSHK0zbWRCBq"},
-            { id: "vgzs4HpGWGa9LMDfGh"},
-            { id: "3og0IToRp5lUiBGvKw"},
-            { id: "lfgy3xlsywZBT7D6g0"},
-            { id: "5T0qtC1TIyqybTq2zC"}
-        ];
-
         return (
             <div>
                 <div className="left-scene">
-                    <Search />      
+                    <Search searchFunction={this.search}/>      
                     <div className="selected-gif">
                         <Gif gifid={this.state.selectedGifId} />
                     </div>
